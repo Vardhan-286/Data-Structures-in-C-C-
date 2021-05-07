@@ -1,0 +1,142 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+	int data;
+	struct node *next;
+};
+
+struct node *front,*rear;
+
+void insertf(int);
+void insertr(int);
+void delete1();
+void display();
+void delete2();
+struct node *create_node(int);
+void init();
+
+int main()
+{
+	int ch,val;
+	init();
+	do{
+	    printf("######## Menu ########");
+	    printf("\n1.Insert from front.");
+	    printf("\n2.Insert from rear.");
+	    printf("\n3.Delete from front.");
+	    printf("\n4.Delete from rear.");
+	    printf("\n5.Display deque.");
+	    printf("\n6.EXIT");
+	    printf("\nEnter choice :");
+	    scanf("%d",&ch);
+
+        switch(ch)
+        {
+    	    case 1:printf("\nWhat to be inserted :");
+    	           scanf("%d",&val);
+    	           printf("%d",val);
+    	           insertf(val);
+    	           break;
+        	case 2:printf("\nWhat to be inserted :");
+    	           scanf("%d",&val);
+    	           insertr(val);
+    	           break;
+    	    case 3:delete1();
+    	           break;
+    	    case 4:delete2();   
+			       break;    
+    	    case 5:display();
+    	           break;                     
+        }
+    }while(ch!=6); 
+    return 0;   
+}
+
+void insertf(int val)
+{
+	struct node *n;
+	n=create_node(val);
+    if(front==NULL){
+		front=n;
+		rear=n;
+		front->next=NULL;
+	}
+	else{
+		n->next=front;
+		front=n;
+		struct node *p;
+		p=front;
+		while(p->next!=NULL){
+			p=p->next;
+		}
+		rear=p;
+	}
+}
+
+void insertr(int val)
+{
+	if(front==NULL){
+	    front=create_node(val);
+		rear=front;
+		front->next=NULL;	
+	}
+	else{
+	    rear->next=create_node(val);
+        rear=rear->next;
+        rear->next=NULL;
+	}
+}
+
+void delete1()
+{
+	if(front==NULL)
+		printf("deque is empty,nothing to delete.\n");
+	else{
+		struct node *ptr;
+		ptr=front;
+        front=front->next;
+        free(ptr);
+    }
+}
+
+void delete2()
+{
+	if(front==NULL)
+		printf("deque is empty,nothing to delete.\n");
+	else{
+		struct node *ptr;
+		ptr=front;
+		while(ptr->next!=rear){
+			ptr=ptr->next;
+		}
+		rear=ptr;
+		ptr=ptr->next;
+		rear->next=NULL;
+		free(ptr);
+	}
+}
+
+void display()
+{
+	struct node *ptr;
+	ptr=front;
+	while(ptr!=NULL){
+		printf("%d ",ptr->data);
+		ptr=ptr->next;
+	}
+	printf("\n");
+}
+
+void init()
+{
+	front=NULL;
+	rear=NULL;
+}
+
+struct node *create_node(int num)
+{
+	struct node *new=(struct node *)malloc(sizeof(struct node));
+	new->data=num;
+	return new;
+}
