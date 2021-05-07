@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <malloc.h>
+
+struct node{
+	int data;
+	struct node *next;
+};
+
+struct queue{
+	struct node *front;
+	struct node *rear;
+};
+
+struct queue *q;
+
+struct queue *Insert(struct queue *,int);
+struct queue *Delete(struct queue *);
+int Peek(struct queue *);
+void Display(struct queue *);
+
+
+int main(int argc, char *argv[]) {
+	int choice,val;
+	while(1){
+	printf("*****MENU*****");
+	printf("\n1.Insert");
+	printf("\n2.Delete");
+	printf("\n3.Peek");
+	printf("\n4.Display");
+	printf("\n5.Exit");
+	printf("\nEnter your choice :");
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 1: printf("\nEnter value to be inserted");
+		        scanf("%d",&val);
+		        q=Insert(q,val);
+		        break;
+		case 2: q=Delete(q);
+		        break;
+		case 3: val=Peek(q);
+		        if(val!=-1){
+		        	printf("\nvalue at the front is %d",val);
+				}
+		        break;        
+		case 4: Display(q);
+		        break;    
+		case 5: printf("thank you");
+			    return 0;		    
+	}
+   }
+} 
+
+struct queue *Insert(struct queue *q,int num){
+	struct node *newnode;
+	newnode=(struct node *)malloc(sizeof(struct node));
+	newnode->data=num;
+	if(q->front==NULL && q->rear==NULL){
+		q->front=q->rear=newnode;
+		newnode->next=NULL;
+	}
+	else{
+		q->rear->next=newnode;
+		q->rear=newnode;
+		q->rear->next=NULL;
+	}
+	return q;
+}
+
+struct queue *Delete(struct queue *q){
+	int val;
+	if(q->front==NULL && q->rear==NULL){
+		printf("queue is empty");
+	}
+	else if(q->front==q->rear){
+		struct node *ptr;
+		val=q->front->data;
+		ptr=q->front;
+		q->front=q->rear=NULL;
+		free(ptr);
+	}
+	else{
+		struct node *ptr;
+		ptr=q->front;
+		val=q->front->data;
+		q->front=q->front->next;
+		free(ptr);
+	}
+	return q;
+}
+
+int Peek(struct queue *q){
+	int val;
+	if(q->front==NULL && q->rear==NULL){
+		printf("queue is empty");
+		return -1;
+	}
+	else{
+		val=q->front->data;
+		return val;
+	}
+}
+
+void Display(struct queue *q){
+	if(q->front==NULL && q->rear==NULL){
+		printf("queue is empty");
+    }
+    else{
+    	struct node *ptr;
+    	ptr=q->front;
+    	while(ptr!=NULL){
+    		printf(" %d ",ptr->data);
+    		ptr=ptr->next;
+		}
+	}
+}
