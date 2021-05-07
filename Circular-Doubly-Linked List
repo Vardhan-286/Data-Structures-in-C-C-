@@ -1,0 +1,92 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+	struct node *left;
+	int data;
+	struct node *right;
+};
+struct node *head=NULL;
+
+struct node *insert(struct node *,int);
+int delete(struct node *);
+void print_list(struct node *);
+
+int main()
+{
+	int choice,value;
+	do{
+	printf("#What you want to do#\n");
+	printf("1.Insert\n");
+	printf("2.delete\n");
+    printf("3.Stop\n");
+    printf("4.Print list\n");
+    printf("What is your choice :");
+    scanf("%d",&choice);
+
+    switch(choice)
+    {
+    	case 1:printf("What do you want to insert :");
+    	       scanf("%d",&value);
+    	       head=insert(head,value);
+    	       break;
+    	case 2:value=delete(head);
+    	       if(value!=-1){
+    	       	printf("%d left from the list\n",value);
+    	       }       
+    	       break;
+    	case 4:print_list(head);       
+    }
+
+    }while(choice!=3);
+}
+
+struct node *insert(struct node *h,int val)
+{
+	struct node *new;
+	new=(struct node *)malloc(sizeof(struct node));
+	new->data=val;
+	if(h==NULL){
+        new->left=h;
+        h=new;
+        new->right=h;
+	}
+	else{
+		struct node *ptr;
+		ptr=h;
+		while(ptr->right!=h){
+			ptr=ptr->right;
+		}
+		new->left=ptr;
+		new->right=h;
+		ptr->right=new; 
+	}
+	return h;
+}
+
+int delete(struct node *h)
+{
+	int num;
+	struct node *x,*px;
+    x=h;
+    while(x->right!=h){
+    	px=x;
+    	x=x->right;
+    }
+    px->right=h;
+    num=x->data;
+    free(x);
+    return num;
+}
+
+void print_list(struct node *h)
+{
+	struct node *p;
+	p=h;
+	while(p->right!=h){
+		printf("%d  ",p->data);
+		p=p->right;
+	}
+	printf("%d\n",p->data);
+	printf("%d\n",p->left->data);
+}
